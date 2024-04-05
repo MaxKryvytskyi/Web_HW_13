@@ -1,4 +1,4 @@
-import os
+
 from pathlib import Path
 
 import uvicorn
@@ -12,9 +12,9 @@ class EmailSchema(BaseModel):
 
 
 conf = ConnectionConfig(
-    MAIL_USERNAME=os.environ['MAIL_USERNAME'],
-    MAIL_PASSWORD=os.environ['MAIL_PASSWORD'],
-    MAIL_FROM=os.environ['MAIL_FROM'],
+    MAIL_USERNAME="example@meta.ua",
+    MAIL_PASSWORD="secretPassword",
+    MAIL_FROM="example@meta.ua",
     MAIL_PORT=465,
     MAIL_SERVER="smtp.meta.ua",
     MAIL_FROM_NAME="Example email",
