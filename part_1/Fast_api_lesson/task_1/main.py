@@ -5,7 +5,7 @@ import uvicorn
 from fastapi import FastAPI, BackgroundTasks
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from pydantic import EmailStr, BaseModel
-from my_config import my_config
+from my_config import MyConfig
 
 
 class EmailSchema(BaseModel):
@@ -13,12 +13,12 @@ class EmailSchema(BaseModel):
 
 
 conf = ConnectionConfig(
-    MAIL_USERNAME=my_config.MAIL_USERNAME,
-    MAIL_PASSWORD=my_config.MAIL_PASSWORD,
-    MAIL_FROM=my_config.MAIL_FROM,
-    MAIL_PORT=my_config.MAIL_PORT,
-    MAIL_SERVER=my_config.MAIL_SERVER,
-    MAIL_FROM_NAME=my_config.MAIL_FROM_NAME,
+    MAIL_USERNAME=str(MyConfig.MAIL_USERNAME[0]),
+    MAIL_PASSWORD=str(MyConfig.MAIL_PASSWORD[0]),
+    MAIL_FROM=str(MyConfig.MAIL_FROM[0]),
+    MAIL_PORT=int(MyConfig.MAIL_PORT[0]),
+    MAIL_SERVER=str(MyConfig.MAIL_SERVER[0]),
+    MAIL_FROM_NAME=str(MyConfig.MAIL_FROM_NAME[0]),
     MAIL_STARTTLS=False,
     MAIL_SSL_TLS=True,
     USE_CREDENTIALS=True,
