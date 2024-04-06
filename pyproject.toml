@@ -19,7 +19,14 @@ passlib = "^1.7.4"
 libgravatar = "^1.0.4"
 psycopg2 = "^2.9.9"
 bcrypt = "^4.0.1"
-
+fastapi-mail = "^1.4.1"
+django = "^4.2.1"
+pillow = "^10.2.0"
+mongoengine = "^0.27.0"
+requests = "^2.31.0"
+beautifulsoup4 = "^4.12.3"
+lxml = "^5.1.0"
+environ = "^1.0"
 
 
 [build-system]

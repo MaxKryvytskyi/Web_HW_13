@@ -13,8 +13,8 @@ from src.config.my_config import MyConfig
 
 class Auth:
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    SECRET_KEY = MyConfig.SECRET_KEY[0]
-    ALGORITHM = MyConfig.ALGORITHM[0]
+    SECRET_KEY = MyConfig.SECRET_KEY
+    ALGORITHM = MyConfig.ALGORITHM
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
     def verify_password(self, plain_password, hashed_password):

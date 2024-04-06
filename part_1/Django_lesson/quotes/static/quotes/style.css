@@ -1,0 +1,109 @@
+/* Пример стилей для поля ввода fullname */
+input#form-group {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    color: rgb(255, 255, 255);
+    font-size: small;
+    background-color: #7CA3E6;
+}
+
+/* Стили для фокуса на поле ввода */
+input#form-group:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px #007bff;
+}
+
+.form-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    color: rgb(255, 255, 255);
+    font-size: small;
+    background-color: #7CA3E6;
+}
+
+
+
+
+a {
+    color: #7CA3E6;
+    text-decoration: none;
+}
+
+.quote {
+    padding: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px #333333;
+}
+
+.quote span.text {
+    display: block;
+    margin-bottom: 7px;
+    font-size: large;
+    font-style: italic;
+}
+
+.quote small.author {
+    font-weight: bold;
+    color: #7CA3E6;
+}
+
+.quote .tags {
+    margin-top: 10px;
+}
+
+.tag {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    font-size: small;
+    background-color: #7CA3E6;
+}
+.pager {
+    font-family: "Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.pager {
+    padding-left: 0;
+    margin: 22px 0;
+    list-style: none;
+    text-align: center;
+}
+
+
+.pager li {
+    display: inline;
+}
+
+.pager .next>a, .pager .next>span {
+    float: right;
+}
+
+.pager li>a, .pager li>span {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 15px;
+}
+
+.pager a {
+    color: #333333;
+}
+
+.disabled {
+    color: #333333;
+    cursor: not-allowed;
+}
+
