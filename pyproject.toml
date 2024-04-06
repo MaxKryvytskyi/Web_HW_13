@@ -12,6 +12,11 @@ pydantic = "^2.6.4"
 fastapi = "^0.110.1"
 fastapi-mail = "^1.4.1"
 sqlalchemy = "^2.0.29"
+libgravatar = "^1.0.3"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+jose = "^1.0.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+
 
 
 [build-system]
