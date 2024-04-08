@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from config.my_config import MyConfig
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%hc(omn(isa*kzx@hef$+4h4nacgt!bngm*^i1i6@ykxe#(e+l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.0.105', 'localhost', '127.0.0.1']
 # ALLOWED_HOSTS = []
@@ -122,10 +123,22 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+STATIC_URL = "static/"
 
-STATIC_URL = 'static/'
+
+STATIC_URL = 'E:/Git_Files/__Python_GOIT__/__Web_2_0__/Web_HW_13/part_1/Django_lesson/quotes/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.meta.ua'
+EMAIL_PORT = 465
+EMAIL_STARTTLS = False
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = MyConfig.MAIL_USERNAME[0]
+EMAIL_HOST_PASSWORD = MyConfig.MAIL_PASSWORD[0]
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

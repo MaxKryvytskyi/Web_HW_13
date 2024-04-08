@@ -13,22 +13,23 @@
 <form action="{% url 'users:login' %}" method="post">
     {% csrf_token %}
     <div>
-        <div>
-            <label> Username:
-                {{ form.username }}
-            </label>
-        </div>
+        <label> Username:
+            {{ form.username }}
+        </label>
+    </div>
 
-        <div>
-            <label>Password:
-                {{ form.password }}
-            </label>
-        </div>
+    <div>
+        <label>Password:
+            {{ form.password }}
+        </label>
     </div>
 
     <div class="grid">
         <button type="submit">Submit</button>
         <button type="reset" class="secondary">Reset</button>
+    </div>
+    <div class="small text-center">
+        <a href="{% url 'users:password_reset' %}" class="text-center"><i>Forgot Password?</i></a>
     </div>
 </form>
 
