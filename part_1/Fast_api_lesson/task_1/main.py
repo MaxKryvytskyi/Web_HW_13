@@ -1,24 +1,21 @@
-
 from pathlib import Path
-
 import uvicorn
 from fastapi import FastAPI, BackgroundTasks
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from pydantic import EmailStr, BaseModel
-from my_config import MyConfig
-
-
+from decouple import config
+ 
 class EmailSchema(BaseModel):
     email: EmailStr
 
 
 conf = ConnectionConfig(
-    MAIL_USERNAME=str(MyConfig.MAIL_USERNAME[0]),
-    MAIL_PASSWORD=str(MyConfig.MAIL_PASSWORD[0]),
-    MAIL_FROM=str(MyConfig.MAIL_FROM[0]),
-    MAIL_PORT=int(MyConfig.MAIL_PORT[0]),
-    MAIL_SERVER=str(MyConfig.MAIL_SERVER[0]),
-    MAIL_FROM_NAME=str(MyConfig.MAIL_FROM_NAME[0]),
+    MAIL_USERNAME=config('MAIL_USERNAME'),
+    MAIL_PASSWORD=config('MAIL_PASSWORD'),
+    MAIL_FROM=config('MAIL_FROM'),
+    MAIL_PORT=config('MAIL_PORT'),
+    MAIL_SERVER=config('MAIL_SERVER'),
+    MAIL_FROM_NAME=config('MAIL_FROM_NAME'),
     MAIL_STARTTLS=False,
     MAIL_SSL_TLS=True,
     USE_CREDENTIALS=True,
@@ -31,6 +28,7 @@ app = FastAPI()
 
 @app.post("/send-email")
 async def send_in_background(background_tasks: BackgroundTasks, body: EmailSchema):
+    print(body)
     message = MessageSchema(
         subject="Fastapi mail module",
         recipients=[body.email],
@@ -39,11 +37,11 @@ async def send_in_background(background_tasks: BackgroundTasks, body: EmailSchem
     )
 
     fm = FastMail(conf)
-
+    print(message)
     background_tasks.add_task(fm.send_message, message, template_name="example_email.html")
 
     return {"message": "email has been sent"}
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)

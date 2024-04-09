@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from config.my_config import MyConfig
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,11 +81,11 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'qwerty',
-        'HOST': '127.0.0.1',
-        'PORT': '5433',
+        'NAME': config("POSTGRES_DB"),
+        'USER': config("POSTGRES_USER"),
+        'PASSWORD': config("POSTGRES_PASSWORD"),
+        'HOST': config("POSTGRES_HOST"),
+        'PORT': config("POSTGRES_PORT_DJANGO"),
     }
 }
 
@@ -123,10 +123,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATIC_URL = "static/"
+# STATIC_URL = "static/"  Not working 
 
 
-STATIC_URL = 'E:/Git_Files/__Python_GOIT__/__Web_2_0__/Web_HW_13/part_1/Django_lesson/quotes/static/'
+STATIC_URL = config("STATIC_URL")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -134,11 +134,11 @@ STATIC_URL = 'E:/Git_Files/__Python_GOIT__/__Web_2_0__/Web_HW_13/part_1/Django_l
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.meta.ua'
-EMAIL_PORT = 465
+EMAIL_HOST = config("MAIL_SERVER")
+EMAIL_PORT = config("MAIL_PORT")
 EMAIL_STARTTLS = False
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-EMAIL_HOST_USER = MyConfig.MAIL_USERNAME[0]
-EMAIL_HOST_PASSWORD = MyConfig.MAIL_PASSWORD[0]
+EMAIL_HOST_USER = config("MAIL_USERNAME")
+EMAIL_HOST_PASSWORD = config("MAIL_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

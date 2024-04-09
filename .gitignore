@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 my_config.py
 __url.py
+.env
+config.ini
 
 # C extensions
 *.so

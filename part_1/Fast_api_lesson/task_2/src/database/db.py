@@ -1,9 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from src.config.my_config import MyConfig
+from decouple import config
 
-
-SQLALCHEMY_DATABASE_URL = MyConfig.SQLALCHEMY_DATABASE_URL
+SQLALCHEMY_DATABASE_URL = config('SQLALCHEMY_DATABASE_URL')
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 

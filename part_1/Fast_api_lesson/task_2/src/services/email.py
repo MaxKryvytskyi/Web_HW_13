@@ -2,18 +2,16 @@ from pathlib import Path
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from fastapi_mail.errors import ConnectionErrors
 from pydantic import EmailStr
-
 from src.services.auth import auth_service
-from src.config.my_config import MyConfig
-
-
+from decouple import config
+ 
 conf = ConnectionConfig(
-    MAIL_USERNAME=str(MyConfig.MAIL_USERNAME[0]),
-    MAIL_PASSWORD=str(MyConfig.MAIL_PASSWORD[0]),
-    MAIL_FROM=str(MyConfig.MAIL_FROM[0]),
-    MAIL_PORT=int(MyConfig.MAIL_PORT[0]),
-    MAIL_SERVER=str(MyConfig.MAIL_SERVER[0]),
-    MAIL_FROM_NAME=str(MyConfig.MAIL_FROM_NAME[0]),
+    MAIL_USERNAME=config("MAIL_USERNAME"),
+    MAIL_PASSWORD=config("MAIL_PASSWORD"),
+    MAIL_FROM=config("MAIL_FROM"),
+    MAIL_PORT=config("MAIL_PORT"),
+    MAIL_SERVER=config("MAIL_SERVER"),
+    MAIL_FROM_NAME=config("MAIL_FROM_NAME"),
     MAIL_STARTTLS=False,
     MAIL_SSL_TLS=True,
     USE_CREDENTIALS=True,
