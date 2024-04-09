@@ -12,10 +12,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -86,6 +91,12 @@ DATABASES = {
         'PASSWORD': config("POSTGRES_PASSWORD"),
         'HOST': config("POSTGRES_HOST"),
         'PORT': config("POSTGRES_PORT_DJANGO"),
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        # 'NAME': env("POSTGRES_DB"),
+        # 'USER': env("POSTGRES_USER"),
+        # 'PASSWORD': env("POSTGRES_PASSWORD"),
+        # 'HOST': env("POSTGRES_HOST"),
+        # 'PORT': env("POSTGRES_PORT_DJANGO"),
     }
 }
 
@@ -134,11 +145,11 @@ STATIC_URL = config("STATIC_URL")
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = config("MAIL_SERVER")
-EMAIL_PORT = config("MAIL_PORT")
+EMAIL_HOST = config("MAIL_SERVER") # env("MAIL_SERVER")
+EMAIL_PORT = config("MAIL_PORT") # env("MAIL_PORT")
 EMAIL_STARTTLS = False
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-EMAIL_HOST_USER = config("MAIL_USERNAME")
-EMAIL_HOST_PASSWORD = config("MAIL_PASSWORD")
+EMAIL_HOST_USER = config("MAIL_USERNAME") # env("MAIL_USERNAME")
+EMAIL_HOST_PASSWORD = config("MAIL_PASSWORD") # env("MAIL_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
