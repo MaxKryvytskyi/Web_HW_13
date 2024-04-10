@@ -16,11 +16,11 @@ import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+BASE_DIR = BASE_DIR.parent
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / '.env')
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -29,7 +29,7 @@ environ.Env.read_env(BASE_DIR / '.env')
 SECRET_KEY = 'django-insecure-%hc(omn(isa*kzx@hef$+4h4nacgt!bngm*^i1i6@ykxe#(e+l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['192.168.0.105', 'localhost', '127.0.0.1']
 # ALLOWED_HOSTS = []
@@ -85,18 +85,18 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config("POSTGRES_DB"),
-        'USER': config("POSTGRES_USER"),
-        'PASSWORD': config("POSTGRES_PASSWORD"),
-        'HOST': config("POSTGRES_HOST"),
-        'PORT': config("POSTGRES_PORT_DJANGO"),
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        # 'NAME': env("POSTGRES_DB"),
-        # 'USER': env("POSTGRES_USER"),
-        # 'PASSWORD': env("POSTGRES_PASSWORD"),
-        # 'HOST': env("POSTGRES_HOST"),
-        # 'PORT': env("POSTGRES_PORT_DJANGO"),
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': config("POSTGRES_DB_D"),
+        # 'USER': config("POSTGRES_USER_D"),
+        # 'PASSWORD': config("POSTGRES_PASSWORD_D"),
+        # 'HOST': config("POSTGRES_HOST_D"),
+        # 'PORT': config("POSTGRES_PORT_DJANGO_D"),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        'NAME': env("POSTGRES_DB_D"),
+        'USER': env("POSTGRES_USER_D"),
+        'PASSWORD': env("POSTGRES_PASSWORD_D"),
+        'HOST': env("POSTGRES_HOST_D"),
+        'PORT': env("POSTGRES_PORT_D"),
     }
 }
 

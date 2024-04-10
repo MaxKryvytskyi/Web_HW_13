@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "web-hw-13-lesson"
+name = "web-hw-13"
 version = "0.1.0"
 package-mode = false
 description = ""
@@ -27,13 +27,10 @@ mongoengine = "^0.27.0"
 requests = "^2.31.0"
 beautifulsoup4 = "^4.12.3"
 lxml = "^5.1.0"
-environ = "^1.0"
-python-dotenv = "^1.0.1"
 python-decouple = "^3.8"
 redis-lru = "^0.1.2"
 django-environ = "^0.11.2"
 slowapi = "^0.1.9"
-
 
 
 [build-system]
