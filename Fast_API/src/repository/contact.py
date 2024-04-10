@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text, func, and_
-from datetime import datetime, timedelta, date
 from fastapi import HTTPException, status
-import psycopg2
+from datetime import datetime, timedelta, date
+
 from src.database.models import Contact
 from src.schemas.contact import ContactUpdate, ContactSchema, ContactDataUpdate, ContactResponse
 

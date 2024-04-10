@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey, Boolean
 from sqlalchemy.sql.sqltypes import Date
 from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey, Boolean
 
 Base = declarative_base()
 

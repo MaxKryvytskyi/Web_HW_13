@@ -22,8 +22,7 @@ async def get_user_by_username(username: str, db: Session = Depends(get_db)):
 
 async def create_user(body: UserSchema, db: Session = Depends(get_db)):
     new_user = User(**body.model_dump())
-    new_user.avatar = "https://res.cloudinary.com/dclrmc6yi/image/upload/v1712731090/samples/cloudinary-icon.png"
-    new_user.confirmed = True
+    new_user.avatar = "https://www.rpnation.com/gallery/250-x-250-placeholder.30091/full?d=1504582354"
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -41,7 +40,6 @@ async def confirmed_email(email: str, db: Session) -> None:
 
 async def update_avatar(email, url: str, db: Session) -> User:
     user = await get_user_by_email(email, db)
-    print("user.avatar = url")
     user.avatar = url
     db.commit()
     return user

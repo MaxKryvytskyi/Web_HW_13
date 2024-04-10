@@ -1,9 +1,11 @@
 from pathlib import Path
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
-from fastapi_mail.errors import ConnectionErrors
-from pydantic import EmailStr
-from src.services.auth import auth_service
 from decouple import config
+from pydantic import EmailStr
+from fastapi_mail.errors import ConnectionErrors
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
+
+from src.services.auth import auth_service
+
  
 conf = ConnectionConfig(
     MAIL_USERNAME=config("MAIL_USERNAME"),

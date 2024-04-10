@@ -1,6 +1,7 @@
+from datetime import date
 from fastapi import APIRouter, HTTPException, Depends, status, Query, Request
 from sqlalchemy.orm import Session
-from datetime import date
+
 from src.database.db import get_db
 from src.schemas.contact import ContactSchema, ContactResponse, ContactDataUpdate, ContactUpdate
 from src.database.models import User 

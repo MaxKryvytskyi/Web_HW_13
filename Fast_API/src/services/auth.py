@@ -1,13 +1,15 @@
-from datetime import datetime, timedelta
 from typing import Optional
+from decouple import config
+from jose import JWTError, jwt
+from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from jose import JWTError, jwt
+
 from src.database.db import get_db
 from src.repository import users as repository_users
-from decouple import config
+
 
 class Auth:
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -19,6 +19,7 @@ class ContactUpdate(ContactSchema):
     birthday: date 
     data: str
 
+
 class ContactDataUpdate(BaseModel):
     data: str
 
