@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text, func, and_
 from datetime import datetime, timedelta, date
-
+from fastapi import HTTPException, status
+import psycopg2
 from src.database.models import Contact
 from src.schemas.contact import ContactUpdate, ContactSchema, ContactDataUpdate, ContactResponse
 
@@ -45,8 +46,16 @@ async def update_contact(user_id: int, contact_id: int, body: ContactUpdate, db:
     if contact:
         contact.first_name = body.first_name
         contact.last_name = body.last_name
-        contact.email = body.email
-        contact.phone = body.phone
+        user = db.query(Contact).filter(Contact.email==body.email).first()
+        
+        if user is None:
+            print(user)
+            contact.email = body.email
+        user = db.query(Contact).filter(Contact.phone==body.phone).first()
+
+        if user is None:
+            print(user)
+            contact.phone = body.phone
         contact.birthday = body.birthday
         contact.data = body.data
         db.commit()
@@ -56,8 +65,11 @@ async def update_contact(user_id: int, contact_id: int, body: ContactUpdate, db:
 async def update_data_contact(user_id: int, contact_id: int, body: ContactDataUpdate, db: Session):
     contact = db.query(Contact).filter(and_(Contact.user_id==user_id, Contact.id==contact_id)).first()
     if contact:
-        contact.data = body.data
-        db.commit()
+        if contact.data == body.data:
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f'With this data "{body.data}" data exists')
+        else:
+            contact.data = body.data
+            db.commit()
     return contact
 
 

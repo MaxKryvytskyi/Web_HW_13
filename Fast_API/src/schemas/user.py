@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, EmailStr
-
+from pydantic import BaseModel, Field, EmailStr, HttpUrl
+from datetime import datetime
 
 class UserSchema(BaseModel):
     username: str = Field(min_length=3, max_length=50)
@@ -7,17 +7,25 @@ class UserSchema(BaseModel):
     password: str = Field(min_length=6, max_length=12)
 
 
-class UserUpdateSchema(UserSchema):
+class UserDb(UserSchema):
+    id: int
     username: str
     email: EmailStr
-    password: str  
+    avatar: HttpUrl
+    created_at: datetime
+
+
+    class Config:
+        from_attributes = True
 
 
 class UserResponse(BaseModel):
-    id: int 
+    id: int
     username: str
     email: EmailStr
-    password: str  
+    avatar: HttpUrl
+    created_at: datetime
+    detail: str = "User successfully created"
 
     class Config:
         from_attributes = True

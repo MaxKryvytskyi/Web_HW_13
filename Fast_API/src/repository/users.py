@@ -22,6 +22,8 @@ async def get_user_by_username(username: str, db: Session = Depends(get_db)):
 
 async def create_user(body: UserSchema, db: Session = Depends(get_db)):
     new_user = User(**body.model_dump())
+    new_user.avatar = ""
+    new_user.confirmed = True
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -31,3 +33,14 @@ async def create_user(body: UserSchema, db: Session = Depends(get_db)):
 async def update_token(user: User, token: str | None, db: Session):
     user.refresh_token = token
     db.commit()
+
+async def confirmed_email(email: str, db: Session) -> None:
+    user = await get_user_by_email(email, db)
+    user.confirmed = True
+    db.commit()
+
+async def update_avatar(email, url: str, db: Session) -> User:
+    user = await get_user_by_email(email, db)
+    user.avatar = url
+    db.commit()
+    return user

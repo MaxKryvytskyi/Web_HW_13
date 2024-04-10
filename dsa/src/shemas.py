@@ -69,6 +69,5 @@ class TokenModel(BaseModel):
     token_type: str = "bearer"
 
 
-class RequestEmail(BaseModel):
-    email: EmailStr
+
     

@@ -408,6 +408,24 @@ files = [
 colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
+name = "cloudinary"
+version = "1.39.1"
+description = "Python and Django SDK for Cloudinary"
+optional = false
+python-versions = "*"
+files = [
+    {file = "cloudinary-1.39.1.tar.gz", hash = "sha256:922467259045ffdd81713b5ed2bc48f1d70f7f3e9812b8b0c206e99d665ed161"},
+]
+
+[package.dependencies]
+certifi = "*"
+six = "*"
+urllib3 = ">=1.26.5"
+
+[package.extras]
+dev = ["tox"]
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 description = "Cross-platform colored terminal text."
@@ -1886,4 +1904,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "217fc16ade2f5e69945222c190f947723a7d4d7b2604bab0fd557d7055f31e5e"
+content-hash = "f77677ef37d03ca4691974890c799b3197ee83312b1872f143661d90979e61c3"

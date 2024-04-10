@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey, Boolean
 from sqlalchemy.sql.sqltypes import Date
 from sqlalchemy.orm import declarative_base, relationship
 
@@ -28,3 +28,5 @@ class User(Base):
     created_at = Column('created_at', DateTime, default=func.now(), nullable=True)
     updated_at = Column('updated_at', DateTime, default=func.now(), onupdate=func.now(), nullable=True)
     refresh_token = Column(String(255), nullable=True)
+    avatar = Column(String(255), nullable=True)
+    confirmed = Column(Boolean, default=False)

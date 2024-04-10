@@ -31,6 +31,7 @@ python-decouple = "^3.8"
 redis-lru = "^0.1.2"
 django-environ = "^0.11.2"
 slowapi = "^0.1.9"
+cloudinary = "^1.39.1"
 
 
 [build-system]
