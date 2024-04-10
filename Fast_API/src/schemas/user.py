@@ -7,13 +7,12 @@ class UserSchema(BaseModel):
     password: str = Field(min_length=6, max_length=12)
 
 
-class UserDb(UserSchema):
+class UserDb(BaseModel):
     id: int
     username: str
     email: EmailStr
     avatar: HttpUrl
     created_at: datetime
-
 
     class Config:
         from_attributes = True

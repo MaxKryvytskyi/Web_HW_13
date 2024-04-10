@@ -12,9 +12,9 @@ from decouple import config
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.get("/me/", response_model=UserDb)
+@router.get("/me", response_model=UserDb)
 async def read_users_me(current_user: User = Depends(auth_service.get_current_user)):
-    return current_user.avatar
+    return current_user
 
 
 @router.patch('/avatar', response_model=UserDb)

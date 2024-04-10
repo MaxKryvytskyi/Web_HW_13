@@ -19,6 +19,34 @@ async def create_contact(request: Request, body: ContactSchema, db: Session = De
     return await repository_contact.create_contact(user_id, body, db)
 
 
+@router.get("/search", response_model=list[ContactResponse])
+@limiter.limit("10/minute")
+async def search_contacts(request: Request,
+    first_name: str = Query(None, description="Search contacts by first name"),
+    last_name: str = Query(None, description="Search contacts by last name"),
+    email: str = Query(None, description="Search contacts by email"),
+    phone: str = Query(None, description="Search contacts by phone"), 
+    birthday: date = Query(None, description="Search contacts by birthday"),
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(auth_service.get_current_user)):
+    user_id = current_user.id
+    contacts = await repository_contact.search_contacts(user_id, first_name, last_name, email, phone, birthday, db)
+ 
+    if contacts is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Birstday not found")
+    return contacts
+
+
+@router.get("/birstdays/all", response_model=list[ContactResponse])
+@limiter.limit("10/minute")
+async def get_birstdays(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
+    user_id = current_user.id
+    contacts = await repository_contact.get_birstdays(user_id, skip, limit, db)
+    if contacts is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Birstday not found")
+    return contacts
+
+
 @router.get("/", response_model=list[ContactResponse])
 @limiter.limit("10/minute")
 async def read_contacts(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
@@ -55,7 +83,7 @@ async def update_contact(request: Request, contact_id: int, body: ContactUpdate,
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
     return contact
-#
+
 
 @router.patch("/{contact_id}", response_model=ContactResponse)
 @limiter.limit("10/minute")
@@ -65,32 +93,9 @@ async def update_data_contact(request: Request, contact_id: int, body: ContactDa
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
     return contact
-#
-
-@router.get("/birstdays/all", response_model=list[ContactResponse])
-@limiter.limit("10/minute")
-async def get_birstdays(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
-    user_id = current_user.id
-    contacts = await repository_contact.get_birstdays(user_id, skip, limit, db)
-    if contacts is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Birstday not found")
-    return contacts
 
 
 
-@router.get("/search/all", response_model=list[ContactResponse])
-@limiter.limit("10/minute")
-async def search_contacts(request: Request,
-    first_name: str = Query(None, description="Search contacts by first name"),
-    last_name: str = Query(None, description="Search contacts by last name"),
-    email: str = Query(None, description="Search contacts by email"),
-    phone: str = Query(None, description="Search contacts by phone"), 
-    birthday: date = Query(None, description="Search contacts by birthday"),
-    db: Session = Depends(get_db), 
-    current_user: User = Depends(auth_service.get_current_user)):
-    user_id = current_user.id
-    contacts = await repository_contact.search_contacts(user_id, first_name, last_name, email, phone, birthday, db)
- 
-    if contacts is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Birstday not found")
-    return contacts
+
+
+
