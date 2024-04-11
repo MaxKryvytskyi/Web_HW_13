@@ -49,7 +49,7 @@ async def get_birstdays(request: Request, skip: int = 0, limit: int = 100, db: S
 
 
 @router.get("/", response_model=list[ContactResponse])
-@limiter.limit("100000/minute")
+@limiter.limit("10/minute")
 async def read_contacts(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
     user_id = current_user.id
     contacts = await repository_contact.get_contacts(user_id, skip, limit, db)

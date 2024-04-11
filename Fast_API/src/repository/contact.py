@@ -5,6 +5,10 @@ from datetime import datetime, timedelta, date
 
 from src.database.models import Contact
 from src.schemas.contact import ContactUpdate, ContactSchema, ContactDataUpdate, ContactResponse
+from src.services.redis import redis_db as r
+import pickle
+
+
 
 
 async def create_contact(user_id: int, body: ContactSchema,  db: Session):
@@ -24,12 +28,23 @@ async def create_contact(user_id: int, body: ContactSchema,  db: Session):
 
 
 async def get_contacts(user_id: int, skip: int, limit: int, db: Session):
+    contacts = r.get(str(user_id))
+    if contacts:
+        return pickle.loads(contacts)
     contacts = db.query(Contact).filter(Contact.user_id==user_id).offset(skip).limit(limit).all()
+    r.set(str(user_id), pickle.dumps(contacts))
+    r.expire(str(user_id), 3600)
     return contacts
 
 
+
 async def get_contact(user_id: int, contact_id: int, db: Session):
+    contact = r.get(str(user_id))
+    if contact:
+        return pickle.loads(contact)
     contact = db.query(Contact).filter(and_(Contact.id==contact_id, Contact.user_id==user_id)).first()
+    r.set(str(user_id), pickle.dumps(contact))
+    r.expire(str(user_id), 3600)
     return contact
 
 

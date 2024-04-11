@@ -1,4 +1,3 @@
-import redis
 import pickle
 from typing import Optional
 from decouple import config
@@ -11,9 +10,8 @@ from sqlalchemy.orm import Session
 
 from src.database.db import get_db
 from src.repository import users as repository_users
+from src.services.redis import redis_db as r
 
-
-r = redis.Redis(host='localhost', port=6379, db=0)
 
 
 class Auth:
