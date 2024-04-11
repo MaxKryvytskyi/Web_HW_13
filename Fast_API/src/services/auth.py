@@ -87,6 +87,13 @@ class Auth:
         token = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
         return token
 
+    def create_email_reset_password_token(self, data: dict):
+        to_encode = data.copy()
+        expire = datetime.utcnow() + timedelta(days=10) ##### 10 minutes #####
+        to_encode.update({"iat": datetime.utcnow(), "exp": expire})
+        token = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
+        return token
+
     async def get_email_from_token(self, token: str):
       try:
           payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])

@@ -1,6 +1,7 @@
 from pathlib import Path
 from decouple import config
 from pydantic import EmailStr
+from fastapi import HTTPException
 from fastapi_mail.errors import ConnectionErrors
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 
@@ -36,3 +37,20 @@ async def send_email(email: EmailStr, username: str, host: str):
         await fm.send_message(message, template_name="email_template.html")
     except ConnectionErrors as err:
         print(err)
+
+
+async def send_resets_password(email: EmailStr, username: str, host: str):
+    try:
+        token_reset_password = auth_service.create_email_reset_password_token({"sub": email})
+        message = MessageSchema(
+            subject="Confirm reset password",
+            recipients=[email],
+            template_body={"host": host, "username": username, "token": token_reset_password},
+            subtype=MessageType.html
+        )
+
+        fm = FastMail(conf)
+        await fm.send_message(message, template_name="password_reset_email.html")
+    except ConnectionErrors as err:
+        raise HTTPException(status_code=500, detail=f"Failed to send an email: {str(err)}")
+    return {"message": "Email has been sent successfully!"}

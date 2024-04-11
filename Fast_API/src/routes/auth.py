@@ -1,18 +1,21 @@
 from sqlalchemy.orm import Session
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm, HTTPAuthorizationCredentials, HTTPBearer
-from fastapi import APIRouter, HTTPException, Depends, status, BackgroundTasks, Request, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Depends, status, BackgroundTasks, Request
 
 from src.database.db import get_db
 from src.repository import users as repository_users
-from src.schemas.email import RequestEmail
+from src.schemas.email import RequestEmail, RequestUserNewPassword
 from src.schemas.user import UserSchema, TokenModel, UserResponse
 from src.services.auth import auth_service
 from src.services.limiter import limiter
-from src.services.email import send_email
+from src.services.email import send_email, send_resets_password
 
 
 router = APIRouter(prefix='/auth', tags=['auth'])
 get_refresh_token = HTTPBearer()
+templates = Jinja2Templates(directory=r"services/templates")
 
 
 @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -65,6 +68,49 @@ async def refresh_token(request: Request, credentials: HTTPAuthorizationCredenti
     refresh_token = await auth_service.create_refresh_token(data={"sub": email})
     await repository_users.update_token(user, refresh_token, db)
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+
+
+@router.post('/reset_password')
+@limiter.limit("10/minute")
+async def reset_password(request: Request, body: RequestEmail, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    user = await repository_users.get_user_by_email(body.email, db)
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email address not found")
+    if user:
+        background_tasks.add_task(send_resets_password, user.email, user.username, request.base_url)
+    return {"message": "Check your email for confirmation."}
+ 
+
+
+@router.post('/reset_password/{token}')
+@limiter.limit("10/minute")
+async def reset_password_token(body: RequestUserNewPassword, request: Request, token: str, db: Session = Depends(get_db)):
+    print(token)
+    print(body.new_password)
+    email = await auth_service.get_email_from_token(token)
+    user = await repository_users.get_user_by_email(email, db)
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Reset password error")
+    if user:
+        user.password = auth_service.get_password_hash(body.new_password)
+        db.commit()
+        return {"message": "Password has been changed"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @router.get('/confirmed_email/{token}')
