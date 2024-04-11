@@ -1,3 +1,5 @@
+import redis
+import pickle
 from typing import Optional
 from decouple import config
 from jose import JWTError, jwt
@@ -9,6 +11,9 @@ from sqlalchemy.orm import Session
 
 from src.database.db import get_db
 from src.repository import users as repository_users
+
+
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 
 class Auth:
@@ -73,23 +78,27 @@ class Auth:
                 raise credentials_exception
         except JWTError as e:
             raise credentials_exception
-
-        user = await repository_users.get_user_by_email(email, db)
+        user = r.get(str(email))
         if user is None:
-            raise credentials_exception
-        return user
+            user = await repository_users.get_user_by_email(email, db)
+            if user is None:
+                raise credentials_exception
+            r.set(str(email), pickle.dumps(user))
+            r.expire(str(email), 3600)
+            return user
+        return pickle.loads(user)
 
 
-    def create_email_token(self, data: dict):
+    async def create_email_token(self, data: dict):
         to_encode = data.copy()
         expire = datetime.utcnow() + timedelta(days=7)
         to_encode.update({"iat": datetime.utcnow(), "exp": expire})
         token = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
         return token
 
-    def create_email_reset_password_token(self, data: dict):
+    async def create_email_reset_password_token(self, data: dict):
         to_encode = data.copy()
-        expire = datetime.utcnow() + timedelta(days=10) ##### 10 minutes #####
+        expire = datetime.utcnow() + timedelta(minutes=10)
         to_encode.update({"iat": datetime.utcnow(), "exp": expire})
         token = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
         return token

@@ -1,6 +1,4 @@
 from sqlalchemy.orm import Session
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm, HTTPAuthorizationCredentials, HTTPBearer
 from fastapi import APIRouter, HTTPException, Depends, status, BackgroundTasks, Request
 
@@ -15,11 +13,11 @@ from src.services.email import send_email, send_resets_password
 
 router = APIRouter(prefix='/auth', tags=['auth'])
 get_refresh_token = HTTPBearer()
-templates = Jinja2Templates(directory=r"services/templates")
 
 
+# регистрация 
 @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-@limiter.limit("1/minute")
+@limiter.limit("10/minute")
 async def signup(request: Request, background_tasks: BackgroundTasks, body: UserSchema, db: Session = Depends(get_db)):
     exist_user = await repository_users.get_user_by_email(body.email, db)
     if exist_user:
@@ -33,8 +31,9 @@ async def signup(request: Request, background_tasks: BackgroundTasks, body: User
     return new_user
 
 
+# авторизация
 @router.post("/login",  response_model=TokenModel, status_code=status.HTTP_201_CREATED)
-@limiter.limit("1/minute")
+@limiter.limit("10/minute")
 async def login(request: Request, body: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = await repository_users.get_user_by_email(body.username, db)
     if user is None:
@@ -53,8 +52,9 @@ async def login(request: Request, body: OAuth2PasswordRequestForm = Depends(), d
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
+# генерация мастер токена
 @router.get('/refresh_token',  response_model=TokenModel)
-@limiter.limit("1/minute")
+@limiter.limit("10/minute")
 async def refresh_token(request: Request, credentials: HTTPAuthorizationCredentials = Depends(get_refresh_token),
                         db: Session = Depends(get_db)):
     token = credentials.credentials
@@ -70,6 +70,8 @@ async def refresh_token(request: Request, credentials: HTTPAuthorizationCredenti
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
+
+# Запрос на скидання паролю User треба Email
 @router.post('/reset_password')
 @limiter.limit("10/minute")
 async def reset_password(request: Request, body: RequestEmail, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
@@ -82,11 +84,10 @@ async def reset_password(request: Request, body: RequestEmail, background_tasks:
  
 
 
+# Скидання паролю, якщо токен живий, приймає new_password
 @router.post('/reset_password/{token}')
 @limiter.limit("10/minute")
 async def reset_password_token(body: RequestUserNewPassword, request: Request, token: str, db: Session = Depends(get_db)):
-    print(token)
-    print(body.new_password)
     email = await auth_service.get_email_from_token(token)
     user = await repository_users.get_user_by_email(email, db)
     if user is None:
@@ -97,22 +98,7 @@ async def reset_password_token(body: RequestUserNewPassword, request: Request, t
         return {"message": "Password has been changed"}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Подтверждение Email
 @router.get('/confirmed_email/{token}')
 @limiter.limit("1/minute")
 async def confirmed_email(request: Request, token: str, db: Session = Depends(get_db)):
@@ -126,6 +112,7 @@ async def confirmed_email(request: Request, token: str, db: Session = Depends(ge
     return {"message": "Email confirmed"}
 
 
+# Запрос на подтверждение Email
 @router.post('/request_email')
 @limiter.limit("1/minute")
 async def request_email(request: Request, body: RequestEmail, background_tasks: BackgroundTasks,

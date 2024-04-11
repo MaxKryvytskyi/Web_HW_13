@@ -15,24 +15,24 @@ database = {
 }
 
 
-@app.get("/product/{product_id}")
-def read_product(product_id: int):
+@app.get("/user/{email}")
+def read_user(email: int):
     start = time()
-    product = r.get(str(product_id))
-    if product is None:
-        product = fetch_product_from_db(product_id)
-        r.set(str(product_id), json.dumps(product))
-        r.expire(str(product_id), 3600)
+    user = r.get(str(email))
+    if user is None:
+        user = fetch_user_from_db(email)
+        r.set(str(email), json.dumps(user))
+        r.expire(str(email), 3600)
         end = time()
         print(end - start)
-        return product
+        return user
     end = time()
     print(end - start)
-    return json.loads(product)
+    return json.loads(user)
 
 
-def fetch_product_from_db(product_id: int):
-    data = database.get(str(product_id), None)
+def fetch_user_from_db(email: int):
+    data = database.get(str(email), None)
     print(data)
     return data
 

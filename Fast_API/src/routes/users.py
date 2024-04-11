@@ -11,7 +11,6 @@ from src.services.auth import auth_service
 from src.schemas.user import UserDb
 from src.services.limiter import limiter
 
-router = APIRouter(prefix='/auth', tags=['auth'])
 router = APIRouter(prefix="/users", tags=["users"])
 
 
